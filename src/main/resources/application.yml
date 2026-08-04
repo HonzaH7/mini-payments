@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payments
+    username: payments
+    password: payments
+  jpa:
+    hibernate:
+      # update = Hibernate si při startu sám vytvoří/doplní tabulky podle entit.
+      # Pro učení pohodlné; v produkci se místo toho používají migrace (Flyway).
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
