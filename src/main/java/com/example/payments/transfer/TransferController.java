@@ -2,6 +2,7 @@ package com.example.payments.transfer;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,7 +15,9 @@ public class TransferController {
     }
 
     @PostMapping("/transfer")
-    public TransferResponse transfer(@RequestBody TransferRequest request) {
-        return transferService.transfer(request.from(), request.to(), request.amount());
+    public TransferResponse transfer(
+            @RequestHeader("Idempotency-Key") String idempotencyKey,
+            @RequestBody TransferRequest request) {
+        return transferService.transfer(idempotencyKey, request.from(), request.to(), request.amount());
     }
 }
