@@ -19,14 +19,14 @@ public class Account {
     @Column(nullable = false)
     private String owner;
 
-    // Peníze NIKDY ne float/double (zaokrouhlovací chyby v binární plovoucí
-    // desetinné čárce). BigDecimal + numeric(19,4) v DB = přesná desetinná
-    // aritmetika. 19 platných číslic, 4 desetinná místa.
+    // Money is NEVER float/double (rounding errors in binary floating point).
+    // BigDecimal + numeric(19,4) in the DB = exact decimal arithmetic.
+    // 19 significant digits, 4 decimal places.
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal balance;
 
     protected Account() {
-        // JPA vyžaduje bezparametrový konstruktor.
+        // JPA requires a no-argument constructor.
     }
 
     public Account(String owner, BigDecimal balance) {

@@ -5,8 +5,8 @@ spring:
     password: payments
   jpa:
     hibernate:
-      # update = Hibernate si při startu sám vytvoří/doplní tabulky podle entit.
-      # Pro učení pohodlné; v produkci se místo toho používají migrace (Flyway).
+      # update = Hibernate creates/updates tables from the entities on startup.
+      # Convenient for learning; in production use migrations instead (Flyway).
       ddl-auto: update
     show-sql: true
     properties:

@@ -9,8 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * Naplní dva testovací účty při startu - ale jen když je tabulka prázdná,
- * takže opakovaný restart nevytvoří duplicity.
+ * Seeds two test accounts on startup - but only when the table is empty,
+ * so repeated restarts do not create duplicates.
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -26,11 +26,11 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (accounts.count() > 0) {
-            log.info("Účty už existují ({}), seed přeskočen.", accounts.count());
+            log.info("Accounts already exist ({}), seeding skipped.", accounts.count());
             return;
         }
         accounts.save(new Account("alice", new BigDecimal("1000.00")));
         accounts.save(new Account("bob", new BigDecimal("500.00")));
-        log.info("Seed hotov: vytvořeny 2 účty (alice=1000.00, bob=500.00).");
+        log.info("Seeding done: created 2 accounts (alice=1000.00, bob=500.00).");
     }
 }
