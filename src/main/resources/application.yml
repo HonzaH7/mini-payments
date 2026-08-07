@@ -1,12 +1,10 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/payments
-    username: payments
-    password: payments
+    username: ${POSTGRES_USER:payments}
+    password: ${POSTGRES_PASSWORD:payments}
   jpa:
     hibernate:
-      # update = Hibernate creates/updates tables from the entities on startup.
-      # Convenient for learning; in production use migrations instead (Flyway).
       ddl-auto: update
     show-sql: true
     properties:
@@ -15,8 +13,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: payments
-    password: payments
+    username: ${RABBITMQ_USER:payments}
+    password: ${RABBITMQ_PASSWORD:payments}
     listener:
       simple:
         retry:
