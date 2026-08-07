@@ -1,5 +1,4 @@
 services:
-  # Jen Postgres. Aplikaci zatím spouštíme lokálně (mvnw), ne v kontejneru.
   postgres:
     image: postgres:16
     environment:
@@ -10,6 +9,15 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: payments
+      RABBITMQ_DEFAULT_PASS: payments
+    ports:
+      - "5672:5672"     # AMQP - app connects here
+      - "15672:15672"   # web management console in browser
 
 volumes:
   pgdata:

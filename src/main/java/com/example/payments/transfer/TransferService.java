@@ -2,10 +2,12 @@ package com.example.payments.transfer;
 
 import com.example.payments.account.Account;
 import com.example.payments.account.AccountRepository;
+import com.example.payments.messaging.TransferCompletedEvent;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +18,15 @@ public class TransferService {
 
     private final AccountRepository accounts;
     private final IdempotencyRecordRepository idempotencyRecords;
+    private final ApplicationEventPublisher events;
 
-    public TransferService(AccountRepository accounts, IdempotencyRecordRepository idempotencyRecords) {
+    public TransferService(
+            AccountRepository accounts,
+            IdempotencyRecordRepository idempotencyRecords,
+            ApplicationEventPublisher events) {
         this.accounts = accounts;
         this.idempotencyRecords = idempotencyRecords;
+        this.events = events;
     }
 
     @Transactional
@@ -58,6 +65,9 @@ public class TransferService {
 
         idempotencyRecords.save(new IdempotencyRecord(
                 idempotencyKey, fromId, toId, amount, from.getBalance(), to.getBalance()));
+
+        // Vyhlásíme Spring událost. Do RabbitMQ ji pošle listener AŽ PO commitu.
+        events.publishEvent(new TransferCompletedEvent(idempotencyKey, fromId, toId, amount));
 
         log.info("Transfer OK: {} from account {} to account {} (key {})", amount, fromId, toId, idempotencyKey);
         return new TransferResponse(fromId, toId, amount, from.getBalance(), to.getBalance());
