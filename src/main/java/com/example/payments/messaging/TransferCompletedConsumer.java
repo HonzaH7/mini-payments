@@ -23,7 +23,7 @@ public class TransferCompletedConsumer {
         try {
             log.info("Consumer received event: {}", event);
             if (event.idempotencyKey().startsWith("fail")) {
-                throw new RuntimeException("Simulated consumer failure for key " + event.idempotencyKey());
+                throw new ConfirmationFailedException("Simulated consumer failure for key " + event.idempotencyKey());
             }
             log.info("Payment confirmation sent for key {}", event.idempotencyKey());
         } finally {
