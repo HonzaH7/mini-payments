@@ -40,8 +40,10 @@ class TransferServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void insufficientFundsRollsBackBoth() {
-        assertThatThrownBy(() -> transferService.transfer(
-                UUID.randomUUID().toString(), aliceId, bobId, new BigDecimal("5000.00")))
+        String key = UUID.randomUUID().toString();
+        BigDecimal tooMuch = new BigDecimal("5000.00");
+
+        assertThatThrownBy(() -> transferService.transfer(key, aliceId, bobId, tooMuch))
                 .isInstanceOf(InsufficientFundsException.class);
 
         assertThat(accounts.findById(aliceId).orElseThrow().getBalance()).isEqualByComparingTo("1000.00");
